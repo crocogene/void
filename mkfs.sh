@@ -11,7 +11,7 @@ swap_partition=
 mkfs.vfat -n "$efi_name" -F 32 "$efi_partition"
 
 # Tank
-cryptsetup luksFormat --type=luks2 "$tank_partition" --verbose
+cryptsetup luksFormat --type=luks2 "$tank_partition" --verbose --batch-mode
 cryptsetup open "$tank_partition" "$crypt_name"
 tank_disk="/dev/mapper/$crypt_name"
 mkfs.btrfs --force -L "$tank_label" "$tank_disk"
