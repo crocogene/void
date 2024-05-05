@@ -17,11 +17,11 @@ if findmnt /mnt &>/dev/null; then
   umount --recursive --force /mnt
 fi
 if [[ -f "$tank_disk" ]]; then
-  cryptsetup close "$crypt_name"
+  cryptsetup close "$crypt_name" --verbose --batch-mode
 fi
 #wipefs -a "$tank_partition"
 cryptsetup luksFormat --type=luks2 "$tank_partition" --verbose --batch-mode
-cryptsetup open "$tank_partition" "$crypt_name" --batch-mode
+cryptsetup open "$tank_partition" "$crypt_name" --verbose --batch-mode
 mkfs.btrfs --force -L "$tank_label" "$tank_disk"
 mount -o "$BTRFS_OPT" "$tank_disk" /mnt
 btrfs subvolume create /mnt/@
