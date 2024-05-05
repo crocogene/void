@@ -10,4 +10,4 @@ cd /usr/bin
 ln -s pigz gzip
 ln -s unpigz gunzip
 
-PS1="$PS1" BTRFS_OPT="$BTRFS_OPT" exec /bin/bash
+/bin/bash
