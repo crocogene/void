@@ -14,7 +14,7 @@ mkfs.vfat -n "$efi_name" -F 32 "$efi_partition"
 # Tank
 tank_disk="/dev/mapper/$crypt_name"
 if findmnt /mnt &>/dev/null; then
-  umount --recursive /mnt
+  umount --recursive --lazy /mnt
 fi
 if [[ -f "$tank_disk" ]]; then
   cryptsetup close "$tank_disk"
