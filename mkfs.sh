@@ -29,11 +29,13 @@ btrfs subvolume create /mnt/@home
 btrfs subvolume create /mnt/@snapshots
 umount /mnt
 mount -o "$BTRFS_OPT",subvol=@ "$tank_disk" /mnt
-mkdir /mnt/{home,var}
+mkdir -p /mnt/{boot/efi,home,var,.snapshots}
 mount -o "$BTRFS_OPT",subvol=@home "$tank_disk" /mnt/home/
+#mount -o "$BTRFS_OPT",subvol=@snapshots "$tank_disk" /mnt/.snapshots
 btrfs subvolume create /mnt/var/cache
 btrfs subvolume create /mnt/var/log
 btrfs subvolume create /mnt/var/tmp
+mount -o noatime "$efi_partition" /mnt/boot/efi
 
 # Swap
 
