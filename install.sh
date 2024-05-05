@@ -12,8 +12,8 @@ cp -r "$SCRIPT_DIR"/etc/. /mnt/etc/
 XBPS_ARCH=$ARCH xbps-install -S -y -r /mnt -R "$REPO" base-system opendoas pigz micro moar iwd
 #xbps-remove -y -r /mnt sudo gzip nvi less wpa_supplicant
 #xbps-remove -y -r /mnt linux-firmware-{broadcom,intel}
-cd /mnt/usr/local ; rm -rf sbin ; ln -s bin sbin
-cd /mnt/usr/bin ; ln -s pigz gzip ; ln -s unpigz gunzip
+#cd /mnt/usr/local ; rm -rf sbin ; ln -s bin sbin
+#cd /mnt/usr/bin ; ln -s pigz gzip ; ln -s unpigz gunzip
 
 cp "$SCRIPT_DIR"/chroot.sh /mnt/root/
-BTRFS_OPT="$BTRFS_OPT" PS1="$PS1" xchroot /mnt /bin/bash /root/chroot.sh
+PS1="$PS1" BTRFS_OPT="$BTRFS_OPT" xchroot /mnt /bin/bash /root/chroot.sh
