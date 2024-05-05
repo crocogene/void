@@ -1,3 +1,8 @@
 #!/bin/env bash
 
-echo "chroot.sh started"
+
+rm -rf /usr/local/sbin
+ln -s /usr/local/bin /usr/local/sbin
+
+
+exec bash
