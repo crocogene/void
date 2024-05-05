@@ -37,7 +37,7 @@ btrfs subvolume create /mnt/var/log
 btrfs subvolume create /mnt/var/tmp
 mount -o noatime "$efi_partition" /mnt/boot/efi
 
-# Swap
+# Swap TODO
 
 
 
