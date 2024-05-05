@@ -12,11 +12,13 @@ mkfs.vfat -n "$efi_name" -F 32 "$efi_partition"
 
 # Tank
 tank_disk="/dev/mapper/$crypt_name"
-if [[ -f "$tank_disk" ]]; then
-  cryptsetup close "$tank_disk"&
-  wait
+if findmnt /mnt &>/dev/null; then
+  umount --recursive /mnt
 fi
-wipefs -a "$tank_partition"
+if [[ -f "$tank_disk" ]]; then
+  cryptsetup close "$tank_disk"
+fi
+#wipefs -a "$tank_partition"
 cryptsetup luksFormat --type=luks2 "$tank_partition" --verbose --batch-mode
 cryptsetup open "$tank_partition" "$crypt_name" --batch-mode
 mkfs.btrfs --force -L "$tank_label" "$tank_disk"
