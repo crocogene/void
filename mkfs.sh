@@ -16,9 +16,8 @@ tank_disk="/dev/mapper/$crypt_name"
 if findmnt /mnt &>/dev/null; then
   umount --recursive --force /mnt
 fi
-if [[ -f "$tank_disk" ]]; then
+if [[ -L "$tank_disk" ]]; then
   cryptsetup close "$crypt_name" --verbose --batch-mode
-  slip 5s
 fi
 #wipefs -a "$tank_partition"
 cryptsetup luksFormat --type=luks2 "$tank_partition" --verbose --batch-mode
