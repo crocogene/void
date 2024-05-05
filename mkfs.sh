@@ -17,7 +17,7 @@ if findmnt /mnt &>/dev/null; then
   umount --recursive --force /mnt
 fi
 if [[ -f "$tank_disk" ]]; then
-  cryptsetup close "$tank_disk"
+  cryptsetup close "$crypt_name"
 fi
 #wipefs -a "$tank_partition"
 cryptsetup luksFormat --type=luks2 "$tank_partition" --verbose --batch-mode
