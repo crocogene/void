@@ -1,0 +1,61 @@
+#!/bin/env bash
+
+system_type=
+scriptfile=
+
+echo -e "\e[31mChecking permissions...\e[0m"
+
+if [ "$EUID" -eq 0 ]; then
+	echo "Please do not run this script as root (e.g. using sudo)"
+	exit
+fi
+
+if [ -f "/etc/artix-release" ]; then
+    system_type="artix"
+elif [ -f "/etc/os-release" ]; then
+	if grep -q "obarun" "/etc/os-release" >/dev/null; then
+		system_type="obarun"
+    elif grep -q "void" "/etc/os-release" >/dev/null; then 
+        system_type="void"
+    elif grep -q "arch" "/etc/os-release" >/dev/null; then 
+        system_type="arch"
+	else
+		echo "Unknown system. Exiting.(1)"
+		exit 1
+	fi
+elif [ -f "/etc/arch-release" ]; then
+	system_type="arch"
+else
+	echo "Unknown syste. Exiting.(2)"
+	exit 1
+fi
+
+case "$system_type" in
+    "void")
+        scriptfile="$HOME/.config/yadm/bootstrap-void.sh"
+        ;;
+    *)
+        echo ""
+        echo "Cannot identify system or system not supported."
+        exit 1
+        ;;
+esac
+
+if [ -z "$scriptfile" ]; then
+    echo ""
+    echo "Cannot find install script for ${system_type}Linux. Exiting."
+    exit 1
+fi
+
+echo -e "\e[32mInstalling for ${system_type}Linux.\e[0m"
+read -p "Do you want to proceed? " reply
+case "$reply" in
+    y|yes|Y|YES)
+        ;;
+    *)
+        echo "Installation cancelled."
+        exit 1
+        ;;
+esac
+
+. "$scriptfile" "$system_type"
