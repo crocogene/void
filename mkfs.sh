@@ -6,7 +6,7 @@ tank_partition=/dev/nvme0n1p2
 crypt_name=cryptotank
 tank_label=tank
 swap_partition=
-. btrfs_opt
+. btrfs_opt.sh
 
 # EFI
 mkfs.vfat -n "$efi_name" -F 32 "$efi_partition"

@@ -1,8 +1,13 @@
 #!/bin/env bash
 
+xbps-remove sudo gzip nvi less wpa_supplicant linux-firmware-broadcom linux-firmware-intel
 
-rm -rf /usr/local/sbin
-ln -s /usr/local/bin /usr/local/sbin
+cd /usr/local
+rm -rf sbin
+ln -s bin sbin
 
+cd /usr/bin
+ln -s pigz gzip
+ln -s unpigz gunzip
 
 exec bash
