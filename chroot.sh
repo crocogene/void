@@ -7,9 +7,11 @@ arch_glibc=x86_64
 xbps-install -Suvy moar iwd turnstile seatd socklog-void refind
 
 # build and install packages from source
-# mesa
+## mesa
 
-# voidnsrun
+## voidnsrun
+
+## hyprland
 
 # install additional packages
 xbps-install -Suvy \
@@ -27,12 +29,13 @@ ln -s /var/log var/log
 cd /glibc/usr/local ; ln -s bin sbin # no separate local sbin needed
 
 xbps_glibc_params="-Suvy -r /glibc -R $repo_glibc -C /etc/xbps-glibc.d"
+echo "$xbps_glibc_params"
 XBPS_ARCH="$arch_glibc" xbps-install "$xbps_glibc_params" void-repo-nonfree
 XBPS_ARCH="$arch_glibc" xbps-install "$xbps_glibc_params" \
   glibc nvidia
 
+# build and install glibc packages from source
 
-
-# make glibc voidnsundo scripts
+# essential configs
 
 
