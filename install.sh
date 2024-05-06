@@ -6,12 +6,11 @@ arch=x86_64-musl
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # /mnt preparations
-install -v -D -t /mnt/var/db/xbps/keys /var/db/xbps/keys/.
+install -d /mnt/var/db/xbps/keys /mnt/etc/ /mnt/usr/{bin,local/bin}
 
-install -v -D -t /mnt/etc/ "$SCRIPT_DIR"/etc/.
-
-install -d /mnt/usr/{bin,local/bin}
-cd /mnt/usr/local ; ln -s bin sbin        # no separate local sbin needed
+cp /var/db/xbps/keys/* /mnt/var/db/xbps/keys            # xbps keys from live iso
+cp -r "$SCRIPT_DIR"/etc/. /mnt/etc/                     # configs from this git repo
+cd /mnt/usr/local ; ln -s bin sbin                      # no separate local sbin needed
 cd /mnt/usr/bin ; ln -s pigz gzip ; ln -s unpigz gunzip # gzip-pigz shim
 
 # install only essential packages 

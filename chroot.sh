@@ -8,7 +8,7 @@ xbps-install -Suvy moar iwd turnstile seatd socklog-void refind \
   mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi mesa-vdpau
 
 # install glibc namespace
-mkdir -p /glibc/{var,usr/local/bin}
+install -d /glibc/{var,usr/local/bin}
 cd /glibc
 ln -s /boot boot
 ln -s /dev dev
