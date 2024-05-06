@@ -4,7 +4,15 @@ repo_glibc=https://repo-default.voidlinux.org/current
 arch_glibc=x86_64
 
 # install additional packages
-xbps-install -Suvy moar iwd turnstile seatd socklog-void refind \
+xbps-install -Suvy moar iwd turnstile seatd socklog-void refind
+
+# build and install packages from source
+# mesa
+
+# voidnsrun
+
+# install additional packages
+xbps-install -Suvy \
   mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi mesa-vdpau
 
 # install glibc namespace
@@ -23,7 +31,7 @@ XBPS_ARCH="$arch_glibc" xbps-install "$xbps_glibc_params" void-repo-nonfree
 XBPS_ARCH="$arch_glibc" xbps-install "$xbps_glibc_params" \
   glibc nvidia
 
-# make and install voidnsrun package
+
 
 # make glibc voidnsundo scripts
 
