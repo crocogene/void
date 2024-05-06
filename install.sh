@@ -1,40 +1,28 @@
 #!/bin/env bash
 
-repo=https://repo-default.voidlinux.org/current
-arch=x86_64
+repo=https://repo-default.voidlinux.org/current/musl
+arch=x86_64-musl
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-mkdir -p /mnt/var/db/xbps/keys
-cp /var/db/xbps/keys/* /mnt/var/db/xbps/keys/
+# /mnt preparations
+install -v -D -t /mnt/var/db/xbps/keys /var/db/xbps/keys/.
 
-mkdir /mnt/etc
-cp -r "$SCRIPT_DIR"/etc/. /mnt/etc/
+install -v -D -t /mnt/etc/ "$SCRIPT_DIR"/etc/.
 
-XBPS_ARCH="$arch"-musl xbps-install -Suvy -r /mnt -R "$repo"/musl -S \
-  base-system pam-mount opendoas pigz micro moar iwd \
-  turnstile seatd socklog-void \
-  mesa-dri 
+install -d /mnt/usr/{bin,local/bin}
+cd /mnt/usr/local ; ln -s bin sbin        # no separate local sbin needed
+cd /mnt/usr/bin ; ln -s pigz gzip ; ln -s unpigz gunzip # gzip-pigz shim
 
-cd /mnt/usr/local ; rm -rf sbin ; ln -s bin sbin
-cd /mnt/usr/bin ; ln -s pigz gzip ; ln -s unpigz gunzip
+# install only essential packages 
+XBPS_ARCH="$arch" xbps-install -Suvy -r /mnt -R "$repo" \
+  base-system pam-mount opendoas pigz micro
 
-mkdir -p /mnt/glibc/var
-cd /mnt/glibc
-ln -s /dev dev
-ln -s /etc etc
-ln -s /proc proc
-ln -s /sys sys
-ln -s /var/log var/log
-ln -s /boot boot
-XBPS_ARCH="$arch" xbps-install -Suvy -r /mnt/glibc -R "$repo" -S \
-#  base-container \
-  nvidia
-
-cd /mnt/glibc/usr/local ; rm -rf sbin ; ln -s bin sbin
-
+# enter chroot environment, run init script and stay in bash interactive session until exit command
 cp "$SCRIPT_DIR"/chroot.sh /mnt/root/
-xchroot /mnt /bin/bash 
+xchroot /mnt /bin/bash -i /root/chroot.sh
 
+# cleanup 
+rm /mnt/root/chroot.sh
 umount --recursive --force /mnt
 
