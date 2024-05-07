@@ -19,7 +19,7 @@ error () {
 }
 
 # EFI
-mkfs.vfat -n $efi_name -F 32 $efi_partition ||
+mkfs.vfat --force -n $efi_name -F 32 $efi_partition ||
   error "Can't create the vfat filesystem on efi partition"
 
 # Tank
