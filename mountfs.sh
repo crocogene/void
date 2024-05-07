@@ -12,7 +12,7 @@ NORMAL="\e[0m"
 RED_LIGHT="\e[1;31m"
 
 function error {
-  echo -e -n "\n\n${RED_LIGHT}$1${NORMAL}\n\n"
+  echo -e -n "\n${RED_LIGHT}$1${NORMAL}\n\n"
   exit 1
 }
 
