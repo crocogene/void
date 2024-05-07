@@ -14,7 +14,7 @@ cd /mnt/usr/bin ; ln -lss pigz gzip ; ln -s unpigz gunzip # gzip-pigz shim
 
 while read p; do
   printf "ignorepkg=$p\n" >>/mnt/etc/xbps.d/ignore.conf
-done <pkglist-ignore
+done < $SCRIPT_DIR/pkglist-ignore
 
 # install essential packages except ignored
 XBPS_ARCH=$arch xbps-install -Suvy -r /mnt -R $repo \
