@@ -13,13 +13,13 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 NORMAL="\e[0m"
 RED_LIGHT="\e[1;31m"
 
-function error {
+error () {
   echo -e -n "\n\n${RED_LIGHT}$1${NORMAL}\n\n"
   exit 1
 }
 
 # EFI
-mkfs.vfat -n $efi_name -F 32 $efi_partition &>/dev/null \ 
+mkfs.vfat -n $efi_name -F 32 $efi_partition \ 
   || error "Can't create the vfat filesystem on efi partition"
 
 # Tank
