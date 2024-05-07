@@ -31,7 +31,7 @@ else
   mount -o noatime $efi_partition /mnt/boot/efi ||
     error "Can't mount efi partition"
 fi
-[[ $1 == "wipe" ]] && rm -rf --one-file-system /mnt/* &>/dev/null && echo -e -n "Wiped!\n"
+
 
 
 

@@ -21,7 +21,7 @@ XBPS_ARCH=$arch xbps-install -Suvy -r /mnt -R $repo \
   base-system pigz
 
 # run init script in the chroot environment
-cp $SCRIPT_DIR/*.sh /mnt/root/chroot.sh
+cp $SCRIPT_DIR/*.sh /mnt/root/
 xchroot /mnt /bin/bash /root/chroot.sh
 # enter chroot interactive until exit command
 xchroot /mnt /bin/bash

@@ -28,13 +28,14 @@ if findmnt /mnt &>/dev/null; then
   umount --recursive --force /mnt
 fi
 if [[ -L $tank_disk ]]; then
-  cryptsetup close $crypt_name --batch-mode ||
-    error "Can't remove the existing $tank_disk"
+  [[ $1 == "reencrypt" ]] && cryptsetup reencrypt $tank_disk --batch-mode ||
+    error "Can't reencrypt $tank_disk"
+else
+  cryptsetup luksFormat --type=luks2 $tank_partition --verbose --batch-mode ||
+    error "Can't initialize LUKS on $tank_partition"
+  cryptsetup open $tank_partition $crypt_name --verbose --batch-mode ||
+    error "Can't setup a mapping $tank_disk"
 fi
-cryptsetup luksFormat --type=luks2 $tank_partition --verbose --batch-mode ||
-  error "Can't initialize LUKS on $tank_partition"
-cryptsetup open $tank_partition $crypt_name --verbose --batch-mode ||
-  error "Can't setup a mapping $tank_disk"
 mkfs.btrfs --force -L $tank_label $tank_disk ||
   error "Can't create the btrfs filesystem on $tank_disk"
 mount -o $btrfs_opt $tank_disk /mnt ||
