@@ -18,11 +18,7 @@ error () {
   exit 1
 }
 
-# EFI
-mkfs.vfat --force -n $efi_name -F 32 $efi_partition ||
-  error "Can't create the vfat filesystem on efi partition"
 
-# Tank
 tank_disk=/dev/mapper/$crypt_name
 if findmnt /mnt &>/dev/null; then
   umount --recursive --force /mnt
@@ -58,6 +54,9 @@ btrfs subvolume create /mnt/var/log ||
   error "Can't create subvol /var/log"
 btrfs subvolume create /mnt/var/tmp ||
   error "Can't create subvol /var/tmp"
+
+mkfs.vfat -n $efi_name -F 32 $efi_partition ||
+  error "Can't create the vfat filesystem on efi partition"  
 mount -o noatime $efi_partition /mnt/boot/efi ||
   error "Can't mount efi partition"
 
