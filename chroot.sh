@@ -16,7 +16,7 @@ xbps-install -Suvy opendoas micro moar iwd socklog-void refind pam-mount dbus \
   turnstile seatd yadm  
 
 # essential configs
-echo "hostname=$hostname" >/etc/hostname
+printf "hostname=$hostname" >/etc/hostname
 
 ## fstab
 uefi_uuid=$(blkid -s UUID -o value $efi_partition)

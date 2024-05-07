@@ -17,7 +17,7 @@ function error {
 }
 
 if findmnt /mnt &>/dev/null; then
-  echo "Already mounted\n"
+  echo -e -n "Already mounted\n"
 else
   tank_disk=/dev/mapper/$crypt_name
   if [[ ! -L $tank_disk ]]; then
@@ -31,7 +31,7 @@ else
   mount -o noatime $efi_partition /mnt/boot/efi ||
     error "Can't mount efi partition"
 fi
-[[ $1 == "wipe" ]] && rm -rf /mnt/* &>/dev/null && echo "Wiped!\n"
+[[ $1 == "wipe" ]] && rm -rf /mnt/* &>/dev/null && echo -e -n "Wiped!\n"
 
 
 

@@ -13,7 +13,7 @@ cd /mnt/usr/local ; ln -s bin sbin                      # no separate local sbin
 cd /mnt/usr/bin ; ln -lss pigz gzip ; ln -s unpigz gunzip # gzip-pigz shim
 
 while read p; do
-  echo "ignorepkg=$p\n" >>/mnt/etc/xbps.d/ignore.conf
+  printf "ignorepkg=$p\n" >>/mnt/etc/xbps.d/ignore.conf
 done <pkglist-ignore
 
 # install essential packages except ignored
