@@ -1,5 +1,5 @@
-sudo
 gzip
+sudo
 nvi
 less
 wpa_supplicant

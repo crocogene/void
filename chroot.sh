@@ -1,41 +1,32 @@
 #!/bin/env bash
 
-repo_glibc=https://repo-default.voidlinux.org/current
-arch_glibc=x86_64
+hostname=void
+keymap=us
+tz=Europe/Istanbul
+user=user
+efi_partition=/dev/nvme0n1p1
+crypt_name=cryptotank
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+. $SCRIPT_DIR/btrfs_opt.sh
 
 # install additional packages
-xbps-install -Suvy moar iwd turnstile seatd socklog-void refind
-
-# build and install packages from source
-## mesa
-
-## voidnsrun
-
-## hyprland
-
-# install additional packages
-xbps-install -Suvy \
-  mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi mesa-vdpau
-
-# install glibc namespace
-install -d /glibc/{var,usr/local/bin}
-cd /glibc
-ln -s /boot boot
-ln -s /dev dev
-ln -s /etc etc
-ln -s /proc proc
-ln -s /sys sys
-ln -s /var/log var/log
-cd /glibc/usr/local ; ln -s bin sbin # no separate local sbin needed
-
-xbps_glibc_params="-Suvy -r /glibc -R $repo_glibc -C /etc/xbps-glibc.d"
-echo "$xbps_glibc_params"
-XBPS_ARCH="$arch_glibc" xbps-install "$xbps_glibc_params" void-repo-nonfree
-XBPS_ARCH="$arch_glibc" xbps-install "$xbps_glibc_params" \
-  glibc nvidia
-
-# build and install glibc packages from source
+xbps-install -Suvy opendoas micro moar iwd socklog-void refind pam-mount dbus \
+  turnstile seatd yadm  
 
 # essential configs
+echo "hostname=$hostname" >/etc/hostname
+
+## fstab
+uefi_uuid=$(blkid -s UUID -o value $efi_partition)
+tank_uuid=$(blkid -s UUID -o value /dev/mapper/$cryptname)
+cat <<EOF > /etc/fstab
+UUID=$tank_uuid / btrfs $btrfs_opt,subvol=@ 0 1
+UUID=$tank_uuid /home btrfs $btrfs_opt,subvol=@home 0 2
+UUID=$tank_uuid /.snapshots btrfs $btrfs_opt,subvol=@snapshots 0 2
+UUID=$uefi_uuid /boot/efi vfat defaults,noatime 0 2
+tmpfs /tmp tmpfs defaults,nosuid,nodev 0 0
+EOF
 
 
