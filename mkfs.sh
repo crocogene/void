@@ -28,8 +28,10 @@ if findmnt /mnt &>/dev/null; then
   umount --recursive --force /mnt
 fi
 if [[ -L $tank_disk ]]; then
-  [[ $1 == "reencrypt" ]] && cryptsetup reencrypt $tank_disk --batch-mode ||
-    error "Can't reencrypt $tank_disk"
+  if [[ $1 == "reencrypt" ]]; then 
+    cryptsetup reencrypt $tank_disk --batch-mode ||
+      error "Can't reencrypt $tank_disk"
+  fi    
 else
   cryptsetup luksFormat --type=luks2 $tank_partition --verbose --batch-mode ||
     error "Can't initialize LUKS on $tank_partition"
