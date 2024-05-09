@@ -1,43 +1,31 @@
 #!/bin/env bash
 
-efi_partition=/dev/nvme0n1p1
-efi_name=EFI
-tank_partition=/dev/nvme0n1p2
-crypt_name=cryptotank
-tank_label=tank
+cd $( dirname "${BASH_SOURCE[0]}" ) || exit 1
+. config.sh || exit 1
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+findmnt /mnt &>/dev/null && umount --recursive --force /mnt
 
-. $SCRIPT_DIR/btrfs_opt.sh
+dd if=/dev/urandom of=btrfs-new.keyfile bs=256 count=1
+chmod 400 btrfs-new.keyfile
 
-NORMAL="\e[0m"
-RED_LIGHT="\e[1;31m"
-
-error () {
-  echo -e -n "\n${RED_LIGHT}$1${NORMAL}\n\n"
-  exit 1
-}
-
-
-tank_disk=/dev/mapper/$crypt_name
-if findmnt /mnt &>/dev/null; then
-  umount --recursive --force /mnt
-fi
-if [[ -L $tank_disk ]]; then
+if [[ -L $sys_disk ]]; then
   if [[ $1 == "reencrypt" ]]; then 
-    cryptsetup reencrypt $tank_disk --batch-mode ||
-      error "Can't reencrypt $tank_disk"
+    cryptsetup reencrypt $sys_disk --batch-mode ||
+      error "Can't reencrypt $sys_disk"
   fi    
 else
-  cryptsetup luksFormat --type=luks2 $tank_partition --verbose --batch-mode ||
-    error "Can't initialize LUKS on $tank_partition"
-  cryptsetup open $tank_partition $crypt_name --verbose --batch-mode ||
-    error "Can't setup a mapping $tank_disk"
+  #dd if=/dev/urandom of=$sys_partition
+  badblocks -c 10240 -s -w -t random -v $sys_partition ||
+    error "Can't fill $sys_partitioin with a random data"
+  cryptsetup luksFormat --type=luks2 $sys_partition --verbose --batch-mode ||
+    error "Can't initialize LUKS on $sys_partition"
+  cryptsetup open $sys_partition $crypt_name --verbose --batch-mode ||
+    error "Can't setup a mapping $sys_disk"
 fi
-mkfs.btrfs --force -L $tank_label $tank_disk ||
-  error "Can't create the btrfs filesystem on $tank_disk"
-mount -o $btrfs_opt $tank_disk /mnt ||
-  error "Can't mount $tank_disk to /mnt"
+mkfs.btrfs --force -L $sys_label $sys_disk ||
+  error "Can't create the btrfs filesystem on $sys_disk"
+mount -o $btrfs_opt $sys_disk /mnt ||
+  error "Can't mount $sys_disk to /mnt"
 btrfs subvolume create /mnt/@ ||
   error "Can't create subvol @"
 btrfs subvolume create /mnt/@home ||
@@ -45,9 +33,9 @@ btrfs subvolume create /mnt/@home ||
 btrfs subvolume create /mnt/@snapshots ||
   error "Can't create subvol @snapshots"
 umount /mnt
-mount -o $btrfs_opt,subvol=@ $tank_disk /mnt
+mount -o $btrfs_opt,subvol=@ $sys_disk /mnt
 mkdir -p /mnt/{boot/efi,home,var,.snapshots}
-mount -o $btrfs_opt,subvol=@home $tank_disk /mnt/home/
+mount -o $btrfs_opt,subvol=@home $sys_disk /mnt/home/
 btrfs subvolume create /mnt/var/cache ||
   error "Can't create subvol /var/cache"
 btrfs subvolume create /mnt/var/log ||
@@ -55,7 +43,7 @@ btrfs subvolume create /mnt/var/log ||
 btrfs subvolume create /mnt/var/tmp ||
   error "Can't create subvol /var/tmp"
 
-mkfs.vfat -n $efi_name -F 32 $efi_partition ||
+mkfs.vfat -n $efi_label -F 32 $efi_partition ||
   error "Can't create the vfat filesystem on efi partition"  
 mount -o noatime $efi_partition /mnt/boot/efi ||
   error "Can't mount efi partition"
