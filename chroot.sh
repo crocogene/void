@@ -54,7 +54,7 @@ sed -i "/#TIMEZONE=/s/.*/TIMEZONE=$tz/" /etc/rc.conf
 sed -i "/#KEYMAP=/s/.*/KEYMAP=$keymap/" /etc/rc.conf
 sed -i "/#FONT=/s/.*/FONT=$font/" /etc/rc.conf
 
-sed -i "/^SHELL=/s/=.*/=\/bin\/zsh/" /etc/default/useradd
+sed -i "/^SHELL=/s/=.*/=\/bin\/$interactive_shell/" /etc/default/useradd
 
 cat <<EOF >/etc/dracut.conf.d/host.conf
 hostonly=yes
