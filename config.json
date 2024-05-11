@@ -1,0 +1,20 @@
+{
+    "partitions": {
+        "efi": "/dev/nvme0n1p1",
+        "sys": "/dev/nvme0n1p2" 
+    },
+    "labels": {
+        "efi": "EFI",
+        "sys": "system",
+        "crypt": "cryptsystem"
+    },
+    "btrfs_opt": "compress-force=zstd:1,noatime,discard=async,commit=120",
+    "repo": "https://repo-default.voidlinux.org/current/musl",
+    "arch": "x86_64-musl",
+    "ishell": "zsh",
+    "hostname": "void",
+    "keymap": "us",
+    "font": "ter-v28b",
+    "tz": "Europe/Amsterdam",
+    "newuser": "voiduser"
+}
