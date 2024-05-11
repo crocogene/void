@@ -1,5 +1,5 @@
 #!/bin/env bash
-a
+
 cd $( dirname "${BASH_SOURCE[0]}" ) || exit 1
 . config.sh || exit 1
  
