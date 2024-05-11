@@ -1,8 +1,8 @@
 #!/bin/env bash
-
+a
 cd $( dirname "${BASH_SOURCE[0]}" ) || exit 1
 . config.sh || exit 1
-
+ 
 uefi_uuid=$(blkid -s UUID -o value $efi_partition)
 luks_uuid=$(cryptsetup luksUUID $sys_partition)
 crypt_name=$(lsblk -J $sys_partition | jq -r '.blockdevices[0].children[] | select(.type=="crypt") | .name')
