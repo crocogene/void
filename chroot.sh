@@ -36,11 +36,12 @@ kernel_cmdline=(
 #add_efi_memmap
 
 # install additional packages, mostly system-based, TUI-only 
-xbps-install -Suvy opendoas micro moar iwd socklog-void cryptsetup \
+xbps-install -Suvy opendoas micro moar iwd socklog-void cryptsetup rsv \
   dbus pam apparmor turnstile seatd polkit iptables-nft \
   refind dracut-uefi systemd-boot-efistub terminus-font zstd \
-  yadm smartmontools ansible \
-  zsh zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting
+  vpm vsv \
+  git git-crypt yadm smartmontools \
+  zsh zsh-autosuggestions zsh-completions zsh-history-substring-search zsh-syntax-highlighting zr
 #sbsigntool efitools
 
 # LUKS keyfile

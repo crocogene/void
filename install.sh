@@ -21,7 +21,7 @@ done
 
 # install essential packages except ignored
 XBPS_ARCH=$arch xbps-install -Suvy -r /mnt -R $repo \
-  base-system pigz
+  base-system pigz jq
 
 # run init script in the chroot environment
 cp *.sh /mnt/root/
