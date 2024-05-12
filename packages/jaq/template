@@ -11,7 +11,10 @@ changelog="https://github.com/01mf02/jaq/releases"
 distfiles="https://github.com/01mf02/jaq/archive/refs/tags/v${version}.tar.gz"
 checksum=185c4b73d128d5af18245d4a514c017e24ddb98b02569357adf4394c865847cf
 
-post_install() {
+do_install() {
+    vbin target/${RUST_TARGET}/release/jaq
+
 	vlicense LICENSE-MIT
-	vdoc README.md
+	vdoc README.md    
 }
+
