@@ -6,15 +6,16 @@ efi_label=EFI
 sys_label=system
 crypt_name=cryptsystem
 btrfs_opt=compress-force=zstd:1,noatime,discard=async,commit=120
+efi_mountpoint=/efi
 
 repo=https://repo-default.voidlinux.org/current/musl
 arch=x86_64-musl
 
-interactive_shell=zsh
+shell=zsh
 hostname=void
 keymap=us
 font=ter-v28b
-tz=Europe/Istanbul
+tz=Europe/Amsterdam
 newuser=user
 
 ####################################
@@ -22,8 +23,8 @@ newuser=user
 ####################################
 sys_disk=/dev/mapper/$crypt_name
 
-# Private settings overwrites (crypted)
-. $( dirname "${BASH_SOURCE[0]}" )/.private/config.sh
+# Private settings overwriting (crypted)
+. $( dirname "${BASH_SOURCE[0]}" )/.priv/config.sh
 
 # Helpers
 NORMAL="\e[0m"

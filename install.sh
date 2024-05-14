@@ -16,16 +16,17 @@ ln -s -r /mnt/usr/bin/pigz /mnt/usr/bin/gzip              # gzip-pigz shim
 ln -s -r /mnt/usr/bin/unpigz /mnt/usr/bin/gunzip          # gzip-pigz shim
 
 for pkg in gzip sudo nvi less wpa_supplicant linux-firmware-broadcom linux-firmware-intel; do
-  printf "ignorepkg=$pkg\n" >>/mnt/etc/xbps.d/ignore.conf
+	printf "ignorepkg=$pkg\n" >>/mnt/etc/xbps.d/ignore.conf
 done
 
 # install essential packages except ignored
+# TODO jq->jaq
 XBPS_ARCH=$arch xbps-install -Suvy -r /mnt -R $repo \
-  base-system pigz jq
+	base-system pigz
 
 # run init script in the chroot environment
-cp *.sh /mnt/root/
-cp -r .private /mnt/root/
+cp -v *.sh /mnt/root/
+cp -v -r .private /mnt/root/
 xchroot /mnt /bin/bash /root/chroot.sh
 
 # enter chroot interactive mode until exit command
@@ -34,4 +35,3 @@ xchroot /mnt /bin/bash
 # cleanup 
 rm -rf /mnt/root/*
 umount --recursive --lazy --verbose /mnt
-

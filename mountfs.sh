@@ -13,7 +13,7 @@ mount -o $btrfs_opt,subvol=@ $sys_disk /mnt ||
   error "Can't mount subvol @"
 mount -o $btrfs_opt,subvol=@home $sys_disk /mnt/home/ ||
   error "Can't mount subvol @home"
-mount -o noatime $efi_partition /mnt/boot/efi ||
+mount -o noatime $efi_partition /mnt$efi_mountpoint ||
   error "Can't mount efi partition"
 
 
