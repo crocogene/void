@@ -5,23 +5,14 @@ cd $( dirname "${BASH_SOURCE[0]}" ) || exit 1
 
 findmnt /mnt &>/dev/null && umount --recursive --force /mnt
 
-#dd if=/dev/urandom of=btrfs-new.keyfile bs=256 count=1
-#chmod 400 btrfs-new.keyfile
 
-if [[ -L $sys_disk ]]; then
-	if [[ $1 == "reencrypt" ]]; then 
-    	cryptsetup reencrypt $sys_disk --batch-mode ||
-			error "Can't reencrypt $sys_disk"
-	fi    
-else
-	#dd if=/dev/urandom of=$sys_partition
-	badblocks -c 10240 -s -w -t random -v $sys_partition ||
-    	error "Can't fill $sys_partitioin with a random data"
-	cryptsetup luksFormat --type=luks2 $sys_partition --verbose --batch-mode ||
-    	error "Can't initialize LUKS on $sys_partition"
-	cryptsetup open $sys_partition $crypt_name --verbose --batch-mode ||
-    	error "Can't setup a mapping $sys_disk"
-fi
+#dd if=/dev/urandom of=$sys_partition
+#badblocks -c 10240 -s -w -t random -v $sys_partition ||
+#    error "Can't fill $sys_partitioin with a random data"
+cryptsetup luksFormat --type=luks2 $sys_partition --verbose --batch-mode ||
+    error "Can't initialize LUKS on $sys_partition"
+cryptsetup open $sys_partition $crypt_name --verbose --batch-mode ||
+    error "Can't setup a mapping $sys_disk"
 mkfs.btrfs --force -L $sys_label $sys_disk ||
 	error "Can't create the btrfs filesystem on $sys_disk"
 mount -o $btrfs_opt $sys_disk /mnt ||
